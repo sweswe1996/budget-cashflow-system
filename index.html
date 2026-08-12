@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#174f78">
+  <title>Cash Flow Data Entry</title>
+
+  <link rel="stylesheet" href="./layout.css">
+</head>
+
+<body>
+  <div class="app">
+    <header class="hero">
+      <h1>Cash Flow Data Entry</h1>
+      <p>IncomeExpenseTracker</p>
+    </header>
+
+    <div class="tabs-wrap">
+      <div class="tabs">
+        <button class="tab active" data-flow="Income" onclick="switchFlow('Income')">
+          💵 <span>Income Data</span>
+        </button>
+
+        <button class="tab" data-flow="Expense" onclick="switchFlow('Expense')">
+          🛒 <span>Expense Data</span>
+        </button>
+
+        <button class="tab" data-flow="Transfer" onclick="switchFlow('Transfer')">
+          🔄 <span>Transfer Data</span>
+        </button>
+      </div>
+    </div>
+
+    <main class="content">
+      <section id="card" class="card theme-Income">
+        <div class="head">
+          <div id="icon" class="icon">💵</div>
+          <div>
+            <h2 id="title" class="title">Income Data</h2>
+            <p id="subtitle" class="subtitle">Enter income cash-flow details.</p>
+          </div>
+        </div>
+
+        <form id="entryForm" onsubmit="submitForm(event)">
+          <div id="fields" class="grid"></div>
+
+          <div class="actions">
+            <button type="button" class="btn clear" onclick="clearForm()">Clear</button>
+            <button id="saveBtn" type="submit" class="btn save">Save Income</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Front-end functions only -->
+  <script src="./common.js"></script>
+</body>
+</html>
