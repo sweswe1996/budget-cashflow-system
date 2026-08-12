@@ -2,24 +2,23 @@
  * Cash Flow Tracker backend
  * Target sheet: Income-Expense-Tracker
  *
- * Sheet columns (A:N):
- * Date | Description | Store Name | Cash Flow | Cash Flow Type |
- * From Source | To Source | Amount | Interest | Currency |
- * Cash Flow Details | ForWho | Status | Note
+ * Sheet columns (A:M):
+ * Date | Description | Cash Flow | Cash Flow Type | From Source |
+ * To Source | Amount | Interest | Currency | Cash Flow Details |
+ * ForWho | Status | Note
  */
 
 const CONFIG = {
   SHEET_NAME: 'Income-Expense-Tracker',
 
-  // If this script is bound to the target Google Sheet, leave blank.
-  // If standalone, paste the Spreadsheet ID here.
+  // Bound script: leave blank.
+  // Standalone script: paste Spreadsheet ID here.
   SPREADSHEET_ID: ''
 };
 
 const EXPECTED_HEADERS = [
   'Date',
   'Description',
-  'Store Name',
   'Cash Flow',
   'Cash Flow Type',
   'From Source',
@@ -74,35 +73,33 @@ function saveEntry(data) {
 
     const targetRow = Math.max(sheet.getLastRow() + 1, headerRow + 1);
 
-    // IMPORTANT:
-    // Write Date separately as plain text BEFORE writing the rest of the row.
-    // This avoids timezone shifting (e.g. 2026-08-01 -> 2026-07-31).
+    // Save exact date text to avoid timezone shift.
     const dateCell = sheet.getRange(targetRow, 1);
     dateCell.setNumberFormat('@');
     dateCell.setValue(validated.dateText);
 
+    // B:M = 12 columns
     const restOfRow = [[
       safeText_(data.description),                  // B Description
-      '',                                           // C Store Name
-      validated.cashFlow,                           // D Cash Flow
-      safeText_(data.cashFlowType),                 // E Cash Flow Type
-      safeText_(data.fromSource),                   // F From Source
-      safeText_(data.toSource),                     // G To Source
-      validated.amount,                             // H Amount
-      '',                                           // I Interest
-      safeText_(data.currency),                     // J Currency
+      validated.cashFlow,                           // C Cash Flow
+      safeText_(data.cashFlowType),                 // D Cash Flow Type
+      safeText_(data.fromSource),                   // E From Source
+      safeText_(data.toSource),                     // F To Source
+      validated.amount,                             // G Amount
+      '',                                           // H Interest
+      safeText_(data.currency),                     // I Currency
       validated.cashFlow === 'Transfer'
         ? '-'
-        : safeText_(data.cashFlowDetails),          // K Cash Flow Details
-      safeText_(data.forWho),                       // L ForWho
-      '',                                           // M Status
-      safeText_(data.note)                          // N Note
+        : safeText_(data.cashFlowDetails),          // J Cash Flow Details
+      safeText_(data.forWho),                       // K ForWho
+      '',                                           // L Status
+      safeText_(data.note)                          // M Note
     ]];
 
-    sheet.getRange(targetRow, 2, 1, 13).setValues(restOfRow);
+    sheet.getRange(targetRow, 2, 1, 12).setValues(restOfRow);
 
-    // Amount formatting
-    sheet.getRange(targetRow, 8).setNumberFormat('0');
+    // Amount column = G
+    sheet.getRange(targetRow, 7).setNumberFormat('0');
 
     return {
       result: 'ok',
@@ -314,7 +311,6 @@ function validateDateText_(value) {
   const month = Number(parts[1]);
   const day = Number(parts[2]);
 
-  // UTC is used ONLY for validation, not for saving.
   const test = new Date(Date.UTC(year, month - 1, day));
 
   if (
