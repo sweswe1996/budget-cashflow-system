@@ -13,7 +13,6 @@
   If this page is served inside Google Apps Script HtmlService and
   google.script.run exists, the script will automatically use it.
 */
-
 const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxtcsnwkFvY2SQPg-UkKlAl347_QUH1uzuE2WKu3WL4jt8_YK0_3NSewfEusVRCdV_K/exec';
 
 const CURRENCIES = ['JPY','MMK','USD'];
