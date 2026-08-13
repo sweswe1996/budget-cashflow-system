@@ -18,7 +18,7 @@ const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxtcsnw
 
 const CURRENCIES = ['JPY','MMK','USD'];
 
-const STATUS_LIST = ['Need','Want'];
+const STATUS_LIST = ['-','Need','Want'];
 
 const FOR_WHO = [
   '-','CS','MG','US','Grandparents','Mother',
@@ -29,6 +29,10 @@ const FOR_WHO = [
 const ALL_SOURCES = {
   JPY:[
     '-',
+    //for exchange
+    'Money_Changer',
+    //for lender
+    'Borrower',
     // MG first
     'Bk-MUFG_MG','Bk-PAYPAY_MG','Bk-YUCHO_MG',
     'Cash_MG',
@@ -36,7 +40,7 @@ const ALL_SOURCES = {
     'E-Walllet_MG','Suika_MG',
 
     // CS second
-    'Bk-MIZUHO_CS','Bk-MUFG_CS','Bk-PAYPAY_CS','Bk-SMBC_CS','Bk-YUCHO_CS',
+    'Bk-MIZUHO_CS','Bk-MUFG_CS','Bk-PAYPAY_CS','Bk-SMBC_CS','Bk-YUCHO_CS','Bk-YUCHO_ATP',
     'Cash_CS',
     'Crd-EOPS_CS','Crd-JCB_CS','Crd-MUFG_CS','Crd-PAYPAY_CS',
     'Crd-RAKUTEN_CS','Crd-SMBC_CS',
@@ -86,7 +90,7 @@ const TYPE_DETAILS = {
     Healthcare_Expenses:['Hospital','Clinic','Medicine','Dental','Eye Care','Health Check','Vaccination'],
     Transportation_Expenses:['Train','Bus','Taxi','Fuel','Parking Fee','Bicycle'],
     Business_Expenses:['Human Resources','Advertising & Marketing','Transportation'],
-    Work_Expenses:['Transportation','Food','Snacks & Drinks','Work Clothes','Business Trip','Training'],
+    Work_Expenses:['Transportation','Stationery','Food','Snacks & Drinks','Work Clothes','Business Trip','Training'],
     Loan_Expenses:['-','Credit Card','Bank','Personal','Cash'],
     Lend_Expenses:['-','Family','Friend','Business','Personal'],
     Exchange_Expenses:['-','Family','Loan','Savings','Personal Use','Business'],
