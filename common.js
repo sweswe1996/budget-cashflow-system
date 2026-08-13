@@ -28,27 +28,27 @@ const FOR_WHO = [
 
 const ALL_SOURCES = {
   JPY:[
-    '-',
-    //for exchange
-    'Money_Changer',
-    //for lender
-    'Borrower',
     // MG first
     'Bk-MUFG_MG','Bk-PAYPAY_MG','Bk-YUCHO_MG',
     'Cash_MG',
     'Crd-JCB_MG','Crd-MUFG_MG','Crd-PAIDY_MG','Crd-PAYPAY_MG',
-    'E-Walllet_MG','Suika_MG',
+    'E-Wallet_MG','Suika_MG',
 
     // CS second
     'Bk-MIZUHO_CS','Bk-MUFG_CS','Bk-PAYPAY_CS','Bk-SMBC_CS','Bk-YUCHO_CS','Bk-YUCHO_ATP',
     'Cash_CS',
     'Crd-EOPS_CS','Crd-JCB_CS','Crd-MUFG_CS','Crd-PAYPAY_CS',
     'Crd-RAKUTEN_CS','Crd-SMBC_CS',
-    'E-Walllet_CS','Suika_CS'
+    'E-Wallet_CS','Suika_CS',
+    
+    //for exchange
+    'Money_Changer',
+
+    //for lender
+    'Borrower'
   ],
 
   MMK:[
-    '-',
     // MG first
     'Bk-AYA_MG','Bk-KBZ_MG','KBZPay_MG','WavePay_MG',
 
@@ -56,7 +56,7 @@ const ALL_SOURCES = {
     'Bk-AYA_CS','Bk-KBZ_CS','KBZPay_CS','WavePay_CS',
 
     // Shared
-    'CASH_MMK'
+    'Cash_CS', 'Cash_MG'
   ],
 
   USD:[
@@ -167,7 +167,7 @@ function sourceGroupName(value){
   if(/^cash/i.test(v)) return '💵 Cash';
 
   if(
-    v.indexOf('E-Walllet') === 0 ||
+    v.indexOf('E-Wallet') === 0 ||
     v.indexOf('KBZPay') === 0 ||
     v.indexOf('WavePay') === 0 ||
     v === 'PayPal'
@@ -177,7 +177,7 @@ function sourceGroupName(value){
 
   if(v.indexOf('Suika') === 0) return '🚆 Suica';
 
-  return '• Other';
+  return '👤 Other';
 }
 
 function groupedSourceOptions(items,placeholder){
@@ -187,7 +187,7 @@ function groupedSourceOptions(items,placeholder){
     '💵 Cash',
     '📱 E-Wallet',
     '🚆 Suica',
-    '• Other'
+    '👤 Other'
   ];
 
   const groups = {};
