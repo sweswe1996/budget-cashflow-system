@@ -304,8 +304,8 @@ function renderFields(){
 
   const forWhoField = `
     <div class="field">
-      <label for="forWho">ForWho</label>
-      <select id="forWho"></select>
+      <label class="req" for="forWho">ForWho</label>
+      <select id="forWho" required></select>
     </div>`;
 
   const statusField = `
