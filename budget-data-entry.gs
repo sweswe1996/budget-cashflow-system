@@ -92,7 +92,7 @@ function saveEntry(data) {
         ? '-'
         : safeText_(data.cashFlowDetails),          // J Cash Flow Details
       safeText_(data.forWho),                       // K ForWho
-      '',                                           // L Status
+      safeText_(data.status),                       // L Status
       safeText_(data.note)                          // M Note
     ]];
 
@@ -147,6 +147,15 @@ function validateEntry_(data) {
     requireField_(data, 'cashFlowDetails', 'Cash Flow Details');
   }
 
+  if (cashFlow === 'Expense') {
+    requireField_(data, 'status', 'Status');
+
+    const status = clean_(data.status);
+
+    if (['Need','Want'].indexOf(status) === -1) {
+      throw new Error('Status must be Need or Want.');
+    }
+  }
   const amount = parseNumber_(data.amount);
 
   if (amount <= 0) {

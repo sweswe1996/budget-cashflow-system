@@ -18,6 +18,8 @@ const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxtcsnw
 
 const CURRENCIES = ['JPY','MMK','USD'];
 
+const STATUS_LIST = ['Need','Want'];
+
 const FOR_WHO = [
   '-','CS','MG','US','Grandparents','Mother',
   'Younger_Brother_1','Younger_Brother_2',
@@ -302,10 +304,35 @@ function renderFields(){
       <select id="forWho"></select>
     </div>`;
 
-  const forWhoAndNote =
-    currentFlow === 'Transfer'
-      ? '<div class="transfer-pair">' + forWhoField + noteField + '</div>'
-      : forWhoField + detailField + noteField;
+  const statusField = `
+  <div class="field">
+    <label class="req" for="status">Status</label>
+    <select id="status" required></select>
+  </div>`;
+
+  let bottomFields = '';
+  if(currentFlow === 'Transfer'){
+    bottomFields =
+      '<div class="transfer-pair">' +
+        forWhoField +
+        noteField +
+      '</div>';
+
+  }else if(currentFlow === 'Expense'){
+    bottomFields =
+      forWhoField +
+      detailField +
+      '<div class="status-note-pair">' +
+        statusField +
+        noteField +
+      '</div>';
+
+  }else{
+    bottomFields =
+      forWhoField +
+      detailField +
+      noteField;
+  }
 
   wrapper.innerHTML = `
     <div class="field">
@@ -350,7 +377,7 @@ function renderFields(){
       <select id="toSource" required></select>
     </div>
 
-    ${forWhoAndNote}
+    ${bottomFields}
   `;
 
   const amount = document.getElementById('amount');
@@ -383,6 +410,11 @@ function renderFields(){
 
   document.getElementById('forWho').innerHTML =
     optionList(FOR_WHO,'Select For Who');
+
+  const status = document.getElementById('status');
+  if(status){
+    status.innerHTML = optionList(STATUS_LIST,'Select Status');
+  }
 
   const type = document.getElementById('cashFlowType');
 
@@ -455,6 +487,7 @@ function collectData(){
     toSource:getValue('toSource'),
     forWho:getValue('forWho'),
     cashFlowDetails:getValue('cashFlowDetails'),
+    status:getValue('status'),
     note:getValue('note')
   };
 }
