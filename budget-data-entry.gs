@@ -2,10 +2,9 @@
  * Cash Flow Tracker backend
  * Target sheet: Income-Expense-Tracker
  *
- * Sheet columns (A:M):
+ * Sheet columns (A:L):
  * Date | Description | Cash Flow | Cash Flow Type | From Source |
- * To Source | Amount | Interest | Currency | Cash Flow Details |
- * ForWho | Status | Note
+ * To Source | Amount | Currency | Cash Flow Detail | ForWho | Status | Note
  */
 
 const CONFIG = {
@@ -24,9 +23,8 @@ const EXPECTED_HEADERS = [
   'From Source',
   'To Source',
   'Amount',
-  'Interest',
   'Currency',
-  'Cash Flow Details',
+  'Cash Flow Detail',
   'ForWho',
   'Status',
   'Note'
@@ -73,12 +71,13 @@ function saveEntry(data) {
 
     const targetRow = Math.max(sheet.getLastRow() + 1, headerRow + 1);
 
-    // Save exact date text to avoid timezone shift.
+    // Date
     const dateCell = sheet.getRange(targetRow, 1);
-    dateCell.setNumberFormat('@');
-    dateCell.setValue(validated.dateText);
+    dateCell.setValue(validated.sheetDateSerial);
+    dateCell.setNumberFormat('yyyy-mm-dd');
+    dateCell.setHorizontalAlignment('left');
 
-    // B:M = 12 columns
+    // B:L data
     const restOfRow = [[
       safeText_(data.description),                  // B Description
       validated.cashFlow,                           // C Cash Flow
@@ -86,27 +85,27 @@ function saveEntry(data) {
       safeText_(data.fromSource),                   // E From Source
       safeText_(data.toSource),                     // F To Source
       validated.amount,                             // G Amount
-      '',                                           // H Interest
-      safeText_(data.currency),                     // I Currency
+      safeText_(data.currency),                     // H Currency
       validated.cashFlow === 'Transfer'
         ? '-'
-        : safeText_(data.cashFlowDetails),          // J Cash Flow Details
-      safeText_(data.forWho),                       // K ForWho
-      safeText_(data.status),                       // L Status
-      safeText_(data.note)                          // M Note
+        : safeText_(data.cashFlowDetails),          // I Cash Flow Detail
+      safeText_(data.forWho),                       // J ForWho
+      safeText_(data.status),                       // K Status
+      safeText_(data.note)                          // L Note
     ]];
 
-    sheet.getRange(targetRow, 2, 1, 12).setValues(restOfRow);
+    // Description / Note -> text format
+    sheet.getRange(targetRow, 2).setNumberFormat('@');  // B = Description
+    sheet.getRange(targetRow, 12).setNumberFormat('@'); // L = Note
 
-    // Amount column = G
+    sheet.getRange(targetRow, 2, 1, 11).setValues(restOfRow);
+
+    // Amount format
     sheet.getRange(targetRow, 7).setNumberFormat('0');
 
     return {
       result: 'ok',
-      message: 'Saved successfully.',
-      row: targetRow,
-      sheet: CONFIG.SHEET_NAME,
-      date: validated.dateText
+      message: 'Saved successfully.'
     };
 
   } catch (err) {
@@ -117,7 +116,7 @@ function saveEntry(data) {
       message: err && err.message ? err.message : String(err)
     };
 
-  } finally {
+  } finally { 
     if (lock.hasLock()) {
       lock.releaseLock();
     }
@@ -138,8 +137,9 @@ function validateEntry_(data) {
   requireField_(data, 'cashFlowType', 'Cash Flow Type');
   requireField_(data, 'fromSource', 'From Source');
   requireField_(data, 'toSource', 'To Source');
+  requireField_(data, 'forWho', 'ForWho');
 
-  const dateText = validateDateText_(data.date);
+  const sheetDateSerial = parseDateSerial_(data.date);
 
   validateCashFlowType_(cashFlow, data.cashFlowType);
 
@@ -150,10 +150,12 @@ function validateEntry_(data) {
   if (cashFlow === 'Expense') {
     requireField_(data, 'status', 'Status');
 
-    const status = clean_(data.status);
 
-    if (['Need','Want'].indexOf(status) === -1) {
-      throw new Error('Status must be Need or Want.');
+    const status = clean_(data.status);
+    const allowedStatus = ['-','Need','Want'];
+
+    if (allowedStatus.indexOf(status) === -1) {
+      throw new Error('Please choose a status.');
     }
   }
   const amount = parseNumber_(data.amount);
@@ -165,7 +167,7 @@ function validateEntry_(data) {
   return {
     cashFlow: cashFlow,
     amount: amount,
-    dateText: dateText
+    sheetDateSerial: sheetDateSerial
   };
 }
 
@@ -308,7 +310,13 @@ function setupSheet() {
   return 'Sheet ready: ' + CONFIG.SHEET_NAME + ', header row: ' + headerRow;
 }
 
-function validateDateText_(value) {
+function requireField_(data, key, label) {
+  if (!clean_(data[key])) {
+    throw new Error(label + ' is required.');
+  }
+}
+
+function parseDateSerial_(value) {
   const text = clean_(value);
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) {
@@ -320,6 +328,7 @@ function validateDateText_(value) {
   const month = Number(parts[1]);
   const day = Number(parts[2]);
 
+  // Validate date
   const test = new Date(Date.UTC(year, month - 1, day));
 
   if (
@@ -330,13 +339,8 @@ function validateDateText_(value) {
     throw new Error('Date is not valid.');
   }
 
-  return text;
-}
-
-function requireField_(data, key, label) {
-  if (!clean_(data[key])) {
-    throw new Error(label + ' is required.');
-  }
+  // Google Sheets date serial number
+  return Date.UTC(year, month - 1, day) / 86400000 + 25569;
 }
 
 function parseNumber_(value) {

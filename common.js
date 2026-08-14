@@ -5,7 +5,6 @@
    Form structure  -> index.html
    Data save       -> budget-data-entry.gs
    ============================================================ */
-
 /*
   For Vercel/static hosting:
   Paste your deployed Apps Script /exec URL here.
@@ -21,9 +20,11 @@ const CURRENCIES = ['JPY','MMK','USD'];
 const STATUS_LIST = ['-','Need','Want'];
 
 const FOR_WHO = [
-  '-','CS','MG','US','Grandparents','Mother',
+  '-','CS','MG','US',
+  'Grandparents','Mother','ThawThaw',
   'Younger_Brother_1','Younger_Brother_2',
-  'Nephew','Niece','Mg_Relative','Cs_Relative','Friend','Coworker'
+  'Nephew & Niece','Nephew','Niece',
+  'Mg_Relative','Cs_Relative','Friend','Coworker'
 ];
 
 const ALL_SOURCES = {
@@ -37,7 +38,7 @@ const ALL_SOURCES = {
     // CS second
     'Bk-MIZUHO_CS','Bk-MUFG_CS','Bk-PAYPAY_CS','Bk-SMBC_CS','Bk-YUCHO_CS','Bk-YUCHO_ATP',
     'Cash_CS',
-    'Crd-EOPS_CS','Crd-JCB_CS','Crd-MUFG_CS','Crd-PAYPAY_CS',
+    'Crd-EOPS_CS','Crd-JCB_CS','Crd-MUFG_CS','Crd-PAIDY_CS','Crd-PAYPAY_CS',
     'Crd-RAKUTEN_CS','Crd-SMBC_CS',
     'E-Wallet_CS','Suika_CS',
     
@@ -54,6 +55,12 @@ const ALL_SOURCES = {
 
     // CS second
     'Bk-AYA_CS','Bk-KBZ_CS','KBZPay_CS','WavePay_CS',
+
+    //home
+    'KBZPay_Mother','KBZPay_Sister',
+
+    //for exchange
+    'Money_Changer',
 
     // Shared
     'Cash_CS', 'Cash_MG'
@@ -73,9 +80,9 @@ const TYPE_DETAILS = {
     Fixed_Income:['Salary1','Salary2','Salary3'],
     Extra_Income:['National_Support','University_Support','Bonus','Gift'],
     Business_Income:['Laptop_Sell','Software_Subscription_Sell','Tiktok'],
-    Loan_Income:['Credit Card','Bank','Family','Friend','Other'],
+    Loan_Income:['-','New Loan','Existing Loan','Additional Loan','Refinance','Other'],//Refinance = အဟောင်း loan ကို loan အသစ်ယူပြီး အစားထိုးတာ
     Lend_Income:['Family Paid Back','Friend Paid Back','Business Paid Back','Other Paid Back'],
-    Exchange_Income:['JPY → MMK','MMK → JPY','USD → MMK','MMK → USD']
+    Exchange_Income:['-','Exchange Received','Refund','Other']
   },
 
   Expense:{
@@ -91,16 +98,16 @@ const TYPE_DETAILS = {
     Transportation_Expenses:['Train','Bus','Taxi','Fuel','Parking Fee','Bicycle'],
     Business_Expenses:['Human Resources','Advertising & Marketing','Transportation'],
     Work_Expenses:['Transportation','Stationery','Food','Snacks & Drinks','Work Clothes','Business Trip','Training'],
-    Loan_Expenses:['-','Credit Card','Bank','Personal','Cash'],
+    Loan_Expenses:['-','Partial Repayment', 'Full Repayment','Interest','Service Fee','Late Fee', 'Other Fee'],
     Lend_Expenses:['-','Family','Friend','Business','Personal'],
-    Exchange_Expenses:['-','Family','Loan','Savings','Personal Use','Business'],
+    Exchange_Expenses:['-','Service Fee','Transfer Fee','Agent Fee','Other Fee'],
     Digital_Expenses:['AI Tools','Cloud Storage','Domain & Hosting','Online Services','App Services'],
     PersonalCare_Expenses:['Haircut','Hair Care','Nail Care','Skin Care','Cosmetics','Body'],
     Travel_Leisure:['Hotel','Travel','Tickets','Shopping','Activities','Gifts','Photo Print'],
     Entertainment:['Movies','Games','Music','Streaming','Events','Hobbies','Fun Activities'],
     Family_Support:['Living Support','Medical Support','Education Support','Gifts','Emergency'],
     Savings_Investments:['Saving','Emergency Fund','NISA','Stocks','Gold','House & Land','Business Fund'],
-    Other_Expenses:['Document','Print']
+    Other_Expenses:['-','Document','Print','Previous Used']
   },
 
   Transfer:{
