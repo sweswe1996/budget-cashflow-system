@@ -94,7 +94,7 @@ const TYPE_DETAILS = {
     Taxes_Insurance:['Health Insurance','Employment Insurance','Pension Contribution','Resident Tax','Income Tax','Bicycle Insurance'],
     Food_Expenses:['Cooking Food','Dining Out','Snacks & Drinks'],
     Fashion_Expenses:['Home Cloth','Outfit Cloth','Underwear Cloth','Sport Cloth','Shoes','Bags','Accessories'],
-    Living_Expenses:['Kitchen Items','Bathroom Items','Cleaning Items','Laundry Items','Bedroom Items','Furniture','Home Appliances','Home Tools','Home Decor','Storage Items','Daily Supplies'],
+    Living_Expenses:['Kitchen Items','Bathroom Items','Cleaning Items','Laundry Items','Bedroom Items','Furniture','Home Appliances','Home Tools','Home Decor','Storage Items','Daily Supplies','Installation Fee'],
     Social_Expenses:['Birthday','Wedding','Funeral','Donation'],
     Education_Expenses:['Tuition Fee','Online Course','Books','Exam Fee','Printing','School Trip','School Supplies','Research'],
     Healthcare_Expenses:['Hospital','Clinic','Medicine','Dental','Eye Care','Health Check','Vaccination'],
