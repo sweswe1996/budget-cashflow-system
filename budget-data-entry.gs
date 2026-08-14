@@ -256,37 +256,39 @@ function getTargetSheet_(ss) {
 
 function ensureHeaders_(sheet) {
   const width = EXPECTED_HEADERS.length;
-  const lastRow = sheet.getLastRow();
 
-  if (lastRow === 0) {
-    sheet.getRange(1, 1, 1, width).setValues([EXPECTED_HEADERS]);
-    styleHeader_(sheet, 1, width);
-    return 1;
+  // This tracker always uses row 1 as the header row.
+  // Re-write A1:L1 with the canonical header names so invisible spaces,
+  // stale header text, or old column labels cannot block data entry.
+  if (sheet.getMaxColumns() < width) {
+    sheet.insertColumnsAfter(
+      sheet.getMaxColumns(),
+      width - sheet.getMaxColumns()
+    );
   }
 
-  const rowsToCheck = Math.min(2, lastRow);
+  const headerRange = sheet.getRange(1, 1, 1, width);
+  const currentHeaders = headerRange.getDisplayValues()[0];
 
-  for (let row = 1; row <= rowsToCheck; row++) {
-    const headers = sheet
-      .getRange(row, 1, 1, width)
-      .getDisplayValues()[0]
-      .map(function(value) {
-        return String(value).trim();
-      });
+  const normalizeHeader = function(value) {
+    return String(value || '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  };
 
-    const matches = headers.every(function(value, index) {
-      return value === EXPECTED_HEADERS[index];
-    });
+  const expectedNormalized = EXPECTED_HEADERS.map(normalizeHeader);
+  const currentNormalized = currentHeaders.map(normalizeHeader);
 
-    if (matches) {
-      return row;
-    }
+  const matches = currentNormalized.every(function(value, index) {
+    return value === expectedNormalized[index];
+  });
+
+  if (!matches) {
+    headerRange.setValues([EXPECTED_HEADERS]);
   }
 
-  throw new Error(
-    'Sheet headers do not match. Expected: ' +
-    EXPECTED_HEADERS.join(' | ')
-  );
+  return 1;
 }
 
 function styleHeader_(sheet, row, width) {

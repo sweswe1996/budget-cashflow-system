@@ -36,11 +36,14 @@ const ALL_SOURCES = {
     'E-Wallet_MG','Suika_MG',
 
     // CS second
-    'Bk-MIZUHO_CS','Bk-MUFG_CS','Bk-PAYPAY_CS','Bk-SMBC_CS','Bk-YUCHO_CS','Bk-YUCHO_ATP',
+    'Bk-MIZUHO_CS','Bk-MUFG_CS','Bk-PAYPAY_CS','Bk-SMBC_CS','Bk-YUCHO_CS',
     'Cash_CS',
     'Crd-EOPS_CS','Crd-JCB_CS','Crd-MUFG_CS','Crd-PAIDY_CS','Crd-PAYPAY_CS',
     'Crd-RAKUTEN_CS','Crd-SMBC_CS',
     'E-Wallet_CS','Suika_CS',
+
+    //family
+    'Bk-YUCHO_ATP',
     
     //for exchange
     'Money_Changer',
