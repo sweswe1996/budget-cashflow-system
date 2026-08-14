@@ -102,7 +102,7 @@ const TYPE_DETAILS = {
     Business_Expenses:['Human Resources','Advertising & Marketing','Transportation'],
     Work_Expenses:['Transportation','Stationery','Food','Snacks & Drinks','Work Clothes','Business Trip','Training'],
     Loan_Expenses:['-','Partial Repayment', 'Full Repayment','Interest','Service Fee','Late Fee', 'Other Fee'],
-    Lend_Expenses:['-','Family','Friend','Business','Personal'],
+    Lend_Expenses:['-','Emergency','Living Expense','Medical','Education', 'Shopping','Travel','Paid for Someone','Other'],
     Exchange_Expenses:['-','Service Fee','Transfer Fee','Agent Fee','Other Fee'],
     Digital_Expenses:['AI Tools','Cloud Storage','Domain & Hosting','Online Services','App Services'],
     PersonalCare_Expenses:['Haircut','Hair Care','Nail Care','Skin Care','Cosmetics','Body'],
